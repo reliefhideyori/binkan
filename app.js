@@ -1,6 +1,6 @@
 // ===== 音声 =====
-const normalSound    = new Audio('assets/sounds/normal.mp3');
-const sensitiveSound = new Audio('assets/sounds/sensitive.mp3');
+const normalSound    = new Audio('assets/sounds/normal.m4a');
+const sensitiveSound = new Audio('assets/sounds/sensitive.m4a');
 normalSound.preload    = 'auto';
 sensitiveSound.preload = 'auto';
 
