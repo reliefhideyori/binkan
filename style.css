@@ -142,8 +142,14 @@ h1 {
   object-fit: cover;
   object-position: center top;
   image-orientation: from-image;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
   z-index: 5;
+  /* 案B: 彩度・コントラストをイラストに近づける */
+  filter: saturate(0.75) contrast(0.88) brightness(1.05);
+  /* 案A: エッジをグラデーションでフェードさせイラストに溶け込ませる */
+  -webkit-mask-image: radial-gradient(ellipse 48% 48% at 50% 50%,
+    black 55%, rgba(0,0,0,0.5) 72%, transparent 100%);
+  mask-image: radial-gradient(ellipse 48% 48% at 50% 50%,
+    black 55%, rgba(0,0,0,0.5) 72%, transparent 100%);
 }
 
 /* 虫眼鏡ボタン */
