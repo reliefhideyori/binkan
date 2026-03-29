@@ -101,7 +101,7 @@ const HEARTS = ['💗', '💖', '💕', '✨', '🌸', '💓', '💝'];
 function showSensitiveOverlay() {
   showBanner(true);
 
-  sensitiveOverlay.innerHTML = '<div class="big-text">💗 敏感ーーー！！！ 💗<br>やっちゃった〜！！</div>';
+  sensitiveOverlay.innerHTML = '<div class="big-text">💕ダメ！！そこは敏感！！💕</div>';
   sensitiveOverlay.classList.remove('hidden');
 
   for (let i = 0; i < 20; i++) {
