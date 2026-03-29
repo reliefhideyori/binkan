@@ -168,11 +168,12 @@ h1 {
 }
 
 .btn-label {
-  font-size: clamp(9px, 2.5vw, 12px);
+  font-size: clamp(13px, 4vw, 17px);
   color: #e05c73;
   font-weight: bold;
   white-space: nowrap;
   pointer-events: none;
+  line-height: 1;
 }
 
 .magnify-btn:active {
