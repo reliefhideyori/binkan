@@ -133,7 +133,6 @@ h1 {
   height: 100%;
   object-fit: fill;
   display: block;
-  mix-blend-mode: multiply;
 }
 
 /* 顔写真: シールスタイル（馴染ませずにわざとらしく貼った感） */
