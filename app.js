@@ -4,9 +4,23 @@ const sensitiveSound = new Audio('assets/sounds/sensitive.m4a');
 normalSound.preload    = 'auto';
 sensitiveSound.preload = 'auto';
 
+// iOS Safari では最初のユーザー操作で音声をアンロックする必要がある
+function unlockAudio() {
+  [normalSound, sensitiveSound].forEach(s => {
+    const vol = s.volume;
+    s.volume = 0;
+    s.play().then(() => {
+      s.pause();
+      s.currentTime = 0;
+      s.volume = vol;
+    }).catch(() => {});
+  });
+}
+
+// cloneNode で再生することで「まだ再生中」「読み込み中」の問題を回避
 function playSound(isSensitive) {
-  const s = isSensitive ? sensitiveSound : normalSound;
-  s.currentTime = 0;
+  const original = isSensitive ? sensitiveSound : normalSound;
+  const s = original.cloneNode();
   s.play().catch(() => {});
 }
 
@@ -15,16 +29,17 @@ const BUTTON_COUNT = 9;
 let sensitiveIndex = null;
 
 // ===== DOM 参照 =====
-const screenPhoto       = document.getElementById('screen-photo');
-const screenGame        = document.getElementById('screen-game');
-const fileInput         = document.getElementById('file-input');
-const preview           = document.getElementById('preview');
-const startBtn          = document.getElementById('start-btn');
-const facePhoto         = document.getElementById('face-photo');
-const resultBanner      = document.getElementById('result-banner');
-const resetBtn          = document.getElementById('reset-btn');
-const magnifyBtns       = document.querySelectorAll('.magnify-btn');
-const sensitiveOverlay  = document.getElementById('sensitive-overlay');
+const screenPhoto      = document.getElementById('screen-photo');
+const screenGame       = document.getElementById('screen-game');
+const fileInput        = document.getElementById('file-input');
+const preview          = document.getElementById('preview');
+const startBtn         = document.getElementById('start-btn');
+const facePhoto        = document.getElementById('face-photo');
+const resultBanner     = document.getElementById('result-banner');
+const resetBtn         = document.getElementById('reset-btn');
+const backBtn          = document.getElementById('back-btn');
+const magnifyBtns      = document.querySelectorAll('.magnify-btn');
+const sensitiveOverlay = document.getElementById('sensitive-overlay');
 
 // ===== Screen 1: 顔写真登録 =====
 fileInput.addEventListener('change', (e) => {
@@ -41,13 +56,17 @@ fileInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-startBtn.addEventListener('click', startGame);
+startBtn.addEventListener('click', () => {
+  unlockAudio(); // スタート時（ユーザー操作）に音声をアンロック
+  startGame();
+});
 
 // ===== Screen 2: ゲーム =====
 function startGame() {
   sensitiveIndex = Math.floor(Math.random() * BUTTON_COUNT);
   facePhoto.src = sessionStorage.getItem('facePhoto');
   magnifyBtns.forEach(btn => btn.classList.remove('pressed'));
+  sensitiveOverlay.classList.add('hidden');
   screenPhoto.hidden = true;
   screenGame.hidden  = false;
   hideBanner();
@@ -71,7 +90,7 @@ function handlePress(index) {
   }
 }
 
-// ===== 通常バナー =====
+// ===== バナー =====
 function showBanner(isSensitive) {
   resultBanner.textContent = isSensitive ? '💗 敏感ーーー！！！ 💗' : 'むむ... 違う';
   resultBanner.className   = isSensitive ? 'sensitive' : 'normal';
@@ -87,14 +106,11 @@ function hideBanner() {
 const HEARTS = ['💗', '💖', '💕', '✨', '🌸', '💓', '💝'];
 
 function showSensitiveOverlay() {
-  // バナーも表示
   showBanner(true);
 
-  // オーバーレイをリセット
   sensitiveOverlay.innerHTML = '<div class="big-text">💗 敏感ーーー！！！ 💗<br>やっちゃった〜！！</div>';
   sensitiveOverlay.classList.remove('hidden');
 
-  // ハートを順次出現させる
   for (let i = 0; i < 20; i++) {
     setTimeout(() => {
       const heart = document.createElement('span');
@@ -108,18 +124,24 @@ function showSensitiveOverlay() {
     }, i * 80);
   }
 
-  // バイブレーション (対応デバイスのみ)
   if (navigator.vibrate) navigator.vibrate([150, 80, 150, 80, 400]);
 
-  // 4秒後にオーバーレイを非表示
   clearTimeout(sensitiveOverlay._timer);
   sensitiveOverlay._timer = setTimeout(() => {
     sensitiveOverlay.classList.add('hidden');
   }, 4000);
 }
 
-// ===== リセット =====
+// ===== もう一度ボタン: ゲームだけリセット、画面は戻らない =====
 resetBtn.addEventListener('click', () => {
+  sensitiveIndex = Math.floor(Math.random() * BUTTON_COUNT);
+  magnifyBtns.forEach(btn => btn.classList.remove('pressed'));
+  sensitiveOverlay.classList.add('hidden');
+  hideBanner();
+});
+
+// ===== 写真を変えるボタン: Screen 1 に戻る =====
+backBtn.addEventListener('click', () => {
   sensitiveIndex = null;
   sensitiveOverlay.classList.add('hidden');
   screenGame.hidden  = true;

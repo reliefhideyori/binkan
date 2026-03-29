@@ -13,8 +13,9 @@
     <h1>敏感ゲーム</h1>
     <p class="subtitle">顔写真を登録してね</p>
 
+    <!-- capture属性なし → iPhoneでカメラ/ライブラリ/ファイルを選べる -->
     <label class="upload-btn" for="file-input">📷 写真を選ぶ</label>
-    <input type="file" id="file-input" accept="image/*" capture="user">
+    <input type="file" id="file-input" accept="image/*">
 
     <div class="preview-wrap">
       <img id="preview" alt="">
@@ -34,21 +35,28 @@
       <img id="face-photo" alt="顔">
 
       <!--
-        虫眼鏡ボタン 9箇所 (top/leftは body.jpg 608×1718px 基準)
+        虫眼鏡ボタン 9箇所
+        top は body.jpg の高さに対する%、left は幅に対する%
       -->
-      <button class="magnify-btn" data-index="0" style="top:21%;left:25%">🔍</button><!-- 左肩 -->
-      <button class="magnify-btn" data-index="1" style="top:21%;left:68%">🔍</button><!-- 右肩 -->
-      <button class="magnify-btn" data-index="2" style="top:30%;left:30%">🔍</button><!-- 左胸 -->
-      <button class="magnify-btn" data-index="3" style="top:30%;left:62%">🔍</button><!-- 右胸 -->
-      <button class="magnify-btn" data-index="4" style="top:42%;left:12%">🔍</button><!-- 左ひじ -->
-      <button class="magnify-btn" data-index="5" style="top:42%;left:80%">🔍</button><!-- 右ひじ -->
-      <button class="magnify-btn" data-index="6" style="top:47%;left:46%">🔍</button><!-- お腹 -->
-      <button class="magnify-btn" data-index="7" style="top:68%;left:33%">🔍</button><!-- 左太もも -->
-      <button class="magnify-btn" data-index="8" style="top:68%;left:58%">🔍</button><!-- 右太もも -->
+      <button class="magnify-btn" data-index="0" style="top:30%;left:28%">🔍</button><!-- 左肩 -->
+      <button class="magnify-btn" data-index="1" style="top:30%;left:66%">🔍</button><!-- 右肩 -->
+      <button class="magnify-btn" data-index="2" style="top:39%;left:31%">🔍</button><!-- 左胸 -->
+      <button class="magnify-btn" data-index="3" style="top:39%;left:62%">🔍</button><!-- 右胸 -->
+      <button class="magnify-btn" data-index="4" style="top:51%;left:14%">🔍</button><!-- 左ひじ -->
+      <button class="magnify-btn" data-index="5" style="top:51%;left:80%">🔍</button><!-- 右ひじ -->
+      <button class="magnify-btn" data-index="6" style="top:56%;left:46%">🔍</button><!-- お腹 -->
+      <button class="magnify-btn" data-index="7" style="top:74%;left:36%">🔍</button><!-- 左太もも -->
+      <button class="magnify-btn" data-index="8" style="top:74%;left:58%">🔍</button><!-- 右太もも -->
     </div>
 
     <div id="result-banner" class="hidden"></div>
-    <button id="reset-btn">最初から</button>
+
+    <div id="game-actions">
+      <!-- ゲームリセット（画面は戻らない） -->
+      <button id="reset-btn">もう一度</button>
+      <!-- 写真登録画面に戻る -->
+      <button id="back-btn">写真を変える</button>
+    </div>
   </div>
 
   <script src="app.js"></script>
