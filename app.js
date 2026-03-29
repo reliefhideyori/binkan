@@ -85,7 +85,7 @@ function handlePress(index) {
 
 // ===== バナー =====
 function showBanner(isSensitive) {
-  resultBanner.textContent = isSensitive ? '💗 敏感ーーー！！！ 💗' : 'むむ... 違う';
+  resultBanner.textContent = isSensitive ? '💕ダメ！！そこは敏感！！💕' : 'むむ... 違う';
   resultBanner.className   = isSensitive ? 'sensitive' : 'normal';
   clearTimeout(resultBanner._timer);
   resultBanner._timer = setTimeout(hideBanner, 2000);
