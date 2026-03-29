@@ -109,6 +109,7 @@ h1 {
   height: 100dvh;
   overflow: hidden;
   width: 100%;
+  background: url('assets/IMG_0328.jpeg') center center / cover no-repeat;
 }
 
 /* 人物コンテナ: 608/1718のアスペクト比を維持しながらビューポートに収める */
