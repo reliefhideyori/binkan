@@ -6,8 +6,8 @@ sensitiveSound.preload = 'auto';
 
 function playSound(isSensitive) {
   const s = isSensitive ? sensitiveSound : normalSound;
-  s.currentTime = 0; // 連打対応: 先頭から再生
-  s.play().catch(() => {}); // ブラウザのAutoplay制限を無視
+  s.currentTime = 0;
+  s.play().catch(() => {});
 }
 
 // ===== 状態 =====
@@ -15,21 +15,21 @@ const BUTTON_COUNT = 9;
 let sensitiveIndex = null;
 
 // ===== DOM 参照 =====
-const screenPhoto  = document.getElementById('screen-photo');
-const screenGame   = document.getElementById('screen-game');
-const fileInput    = document.getElementById('file-input');
-const preview      = document.getElementById('preview');
-const startBtn     = document.getElementById('start-btn');
-const facePhoto    = document.getElementById('face-photo');
-const resultBanner = document.getElementById('result-banner');
-const resetBtn     = document.getElementById('reset-btn');
-const magnifyBtns  = document.querySelectorAll('.magnify-btn');
+const screenPhoto       = document.getElementById('screen-photo');
+const screenGame        = document.getElementById('screen-game');
+const fileInput         = document.getElementById('file-input');
+const preview           = document.getElementById('preview');
+const startBtn          = document.getElementById('start-btn');
+const facePhoto         = document.getElementById('face-photo');
+const resultBanner      = document.getElementById('result-banner');
+const resetBtn          = document.getElementById('reset-btn');
+const magnifyBtns       = document.querySelectorAll('.magnify-btn');
+const sensitiveOverlay  = document.getElementById('sensitive-overlay');
 
 // ===== Screen 1: 顔写真登録 =====
 fileInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = (ev) => {
     const dataUrl = ev.target.result;
@@ -45,16 +45,9 @@ startBtn.addEventListener('click', startGame);
 
 // ===== Screen 2: ゲーム =====
 function startGame() {
-  // 毎回ランダムで敏感ボタンを1つ決定
   sensitiveIndex = Math.floor(Math.random() * BUTTON_COUNT);
-
-  // 顔写真をセット
   facePhoto.src = sessionStorage.getItem('facePhoto');
-
-  // ボタンをすべてリセット
   magnifyBtns.forEach(btn => btn.classList.remove('pressed'));
-
-  // 画面切り替え
   screenPhoto.hidden = true;
   screenGame.hidden  = false;
   hideBanner();
@@ -63,7 +56,7 @@ function startGame() {
 magnifyBtns.forEach((btn) => {
   btn.addEventListener('click', () => {
     const index = parseInt(btn.dataset.index, 10);
-    btn.classList.add('pressed'); // 押したボタンをグレーアウト
+    btn.classList.add('pressed');
     handlePress(index);
   });
 });
@@ -71,13 +64,17 @@ magnifyBtns.forEach((btn) => {
 function handlePress(index) {
   const isSensitive = (index === sensitiveIndex);
   playSound(isSensitive);
-  showBanner(isSensitive);
+  if (isSensitive) {
+    showSensitiveOverlay();
+  } else {
+    showBanner(false);
+  }
 }
 
+// ===== 通常バナー =====
 function showBanner(isSensitive) {
-  resultBanner.textContent = isSensitive ? '🎉 敏感ーーー！！！' : 'むむ... 違う';
+  resultBanner.textContent = isSensitive ? '💗 敏感ーーー！！！ 💗' : 'むむ... 違う';
   resultBanner.className   = isSensitive ? 'sensitive' : 'normal';
-
   clearTimeout(resultBanner._timer);
   resultBanner._timer = setTimeout(hideBanner, 2000);
 }
@@ -86,9 +83,45 @@ function hideBanner() {
   resultBanner.className = 'hidden';
 }
 
+// ===== 敏感ヒット演出 =====
+const HEARTS = ['💗', '💖', '💕', '✨', '🌸', '💓', '💝'];
+
+function showSensitiveOverlay() {
+  // バナーも表示
+  showBanner(true);
+
+  // オーバーレイをリセット
+  sensitiveOverlay.innerHTML = '<div class="big-text">💗 敏感ーーー！！！ 💗<br>やっちゃった〜！！</div>';
+  sensitiveOverlay.classList.remove('hidden');
+
+  // ハートを順次出現させる
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      const heart = document.createElement('span');
+      heart.className = 'heart-float';
+      heart.textContent = HEARTS[Math.floor(Math.random() * HEARTS.length)];
+      heart.style.left   = Math.random() * 90 + 5 + '%';
+      heart.style.bottom = Math.random() * 40 + '%';
+      heart.style.animationDelay = Math.random() * 0.5 + 's';
+      sensitiveOverlay.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
+    }, i * 80);
+  }
+
+  // バイブレーション (対応デバイスのみ)
+  if (navigator.vibrate) navigator.vibrate([150, 80, 150, 80, 400]);
+
+  // 4秒後にオーバーレイを非表示
+  clearTimeout(sensitiveOverlay._timer);
+  sensitiveOverlay._timer = setTimeout(() => {
+    sensitiveOverlay.classList.add('hidden');
+  }, 4000);
+}
+
 // ===== リセット =====
 resetBtn.addEventListener('click', () => {
   sensitiveIndex = null;
+  sensitiveOverlay.classList.add('hidden');
   screenGame.hidden  = true;
   screenPhoto.hidden = false;
   fileInput.value    = '';

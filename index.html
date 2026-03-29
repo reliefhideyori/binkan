@@ -25,23 +25,26 @@
 
   <!-- Screen 2: ゲーム -->
   <div id="screen-game" hidden>
+
+    <!-- 敏感ヒット時のフルスクリーンオーバーレイ -->
+    <div id="sensitive-overlay" class="hidden"></div>
+
     <div id="figure-container">
       <img id="body-illustration" src="assets/body.jpg" alt="体">
       <img id="face-photo" alt="顔">
 
       <!--
-        虫眼鏡ボタン 9箇所
-        ※ top/left の % は body.png のサイズに合わせて調整可
+        虫眼鏡ボタン 9箇所 (top/leftは body.jpg 608×1718px 基準)
       -->
-      <button class="magnify-btn" data-index="0" style="top:27%;left:18%">🔍</button><!-- 左肩 -->
-      <button class="magnify-btn" data-index="1" style="top:27%;left:72%">🔍</button><!-- 右肩 -->
-      <button class="magnify-btn" data-index="2" style="top:37%;left:26%">🔍</button><!-- 左胸 -->
-      <button class="magnify-btn" data-index="3" style="top:37%;left:64%">🔍</button><!-- 右胸 -->
-      <button class="magnify-btn" data-index="4" style="top:48%;left:7%">🔍</button><!-- 左ひじ -->
-      <button class="magnify-btn" data-index="5" style="top:48%;left:83%">🔍</button><!-- 右ひじ -->
-      <button class="magnify-btn" data-index="6" style="top:53%;left:44%">🔍</button><!-- お腹 -->
-      <button class="magnify-btn" data-index="7" style="top:70%;left:28%">🔍</button><!-- 左太もも -->
-      <button class="magnify-btn" data-index="8" style="top:70%;left:62%">🔍</button><!-- 右太もも -->
+      <button class="magnify-btn" data-index="0" style="top:21%;left:25%">🔍</button><!-- 左肩 -->
+      <button class="magnify-btn" data-index="1" style="top:21%;left:68%">🔍</button><!-- 右肩 -->
+      <button class="magnify-btn" data-index="2" style="top:30%;left:30%">🔍</button><!-- 左胸 -->
+      <button class="magnify-btn" data-index="3" style="top:30%;left:62%">🔍</button><!-- 右胸 -->
+      <button class="magnify-btn" data-index="4" style="top:42%;left:12%">🔍</button><!-- 左ひじ -->
+      <button class="magnify-btn" data-index="5" style="top:42%;left:80%">🔍</button><!-- 右ひじ -->
+      <button class="magnify-btn" data-index="6" style="top:47%;left:46%">🔍</button><!-- お腹 -->
+      <button class="magnify-btn" data-index="7" style="top:68%;left:33%">🔍</button><!-- 左太もも -->
+      <button class="magnify-btn" data-index="8" style="top:68%;left:58%">🔍</button><!-- 右太もも -->
     </div>
 
     <div id="result-banner" class="hidden"></div>
