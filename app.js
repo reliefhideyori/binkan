@@ -4,20 +4,8 @@ const sensitiveSound = new Audio('assets/sounds/sensitive.m4a');
 normalSound.preload    = 'auto';
 sensitiveSound.preload = 'auto';
 
-// iOS Safari では最初のユーザー操作で音声をアンロックする必要がある
-function unlockAudio() {
-  [normalSound, sensitiveSound].forEach(s => {
-    const vol = s.volume;
-    s.volume = 0;
-    s.play().then(() => {
-      s.pause();
-      s.currentTime = 0;
-      s.volume = vol;
-    }).catch(() => {});
-  });
-}
-
-// cloneNode で再生することで「まだ再生中」「読み込み中」の問題を回避
+// cloneNode で再生 → 連打や同時再生の競合を防ぐ
+// ※ iOSはクリック操作が user gesture になるので unlock不要
 function playSound(isSensitive) {
   const original = isSensitive ? sensitiveSound : normalSound;
   const s = original.cloneNode();
@@ -25,7 +13,7 @@ function playSound(isSensitive) {
 }
 
 // ===== 状態 =====
-const BUTTON_COUNT = 9;
+const BUTTON_COUNT = 5;
 let sensitiveIndex = null;
 
 // ===== DOM 参照 =====
@@ -56,10 +44,7 @@ fileInput.addEventListener('change', (e) => {
   reader.readAsDataURL(file);
 });
 
-startBtn.addEventListener('click', () => {
-  unlockAudio(); // スタート時（ユーザー操作）に音声をアンロック
-  startGame();
-});
+startBtn.addEventListener('click', startGame);
 
 // ===== Screen 2: ゲーム =====
 function startGame() {
@@ -132,7 +117,7 @@ function showSensitiveOverlay() {
   }, 4000);
 }
 
-// ===== もう一度ボタン: ゲームだけリセット、画面は戻らない =====
+// ===== もう一度: ゲームのみリセット =====
 resetBtn.addEventListener('click', () => {
   sensitiveIndex = Math.floor(Math.random() * BUTTON_COUNT);
   magnifyBtns.forEach(btn => btn.classList.remove('pressed'));
@@ -140,7 +125,7 @@ resetBtn.addEventListener('click', () => {
   hideBanner();
 });
 
-// ===== 写真を変えるボタン: Screen 1 に戻る =====
+// ===== 写真を変える: Screen 1 に戻る =====
 backBtn.addEventListener('click', () => {
   sensitiveIndex = null;
   sensitiveOverlay.classList.add('hidden');
