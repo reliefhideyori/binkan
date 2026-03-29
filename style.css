@@ -201,7 +201,8 @@ h1 {
   min-height: 44px;
   padding: 10px 24px;
   border-radius: 14px;
-  font-size: 1.1rem;
+  font-size: clamp(11px, 3.5vw, 15px);
+  white-space: nowrap;
   font-weight: bold;
   text-align: center;
   flex-shrink: 0;
@@ -287,7 +288,8 @@ h1 {
 }
 
 #sensitive-overlay .big-text {
-  font-size: clamp(2rem, 10vw, 3.5rem);
+  font-size: clamp(1rem, 5vw, 1.6rem);
+  white-space: nowrap;
   font-weight: bold;
   color: #fff;
   text-shadow: 0 2px 12px rgba(0,0,0,0.3);
