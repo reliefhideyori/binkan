@@ -13,7 +13,7 @@ function playSound(isSensitive) {
 }
 
 // ===== 状態 =====
-const BUTTON_COUNT = 5;
+const BUTTON_COUNT = 8;
 let sensitiveIndex = null;
 
 // ===== DOM 参照 =====
