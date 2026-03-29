@@ -130,7 +130,7 @@ h1 {
   mix-blend-mode: multiply;
 }
 
-/* 顔写真: イラストの顔を覆う円形クロップ (2.5倍サイズ、中心を旧下端に合わせる) */
+/* 顔写真: シールスタイル（馴染ませずにわざとらしく貼った感） */
 #face-photo {
   position: absolute;
   top: 1%;
@@ -143,13 +143,12 @@ h1 {
   object-position: center top;
   image-orientation: from-image;
   z-index: 5;
-  /* 案B: 彩度・コントラストをイラストに近づける */
-  filter: saturate(0.75) contrast(0.88) brightness(1.05);
-  /* 案A: エッジをグラデーションでフェードさせイラストに溶け込ませる */
-  -webkit-mask-image: radial-gradient(ellipse 48% 48% at 50% 50%,
-    black 55%, rgba(0,0,0,0.5) 72%, transparent 100%);
-  mask-image: radial-gradient(ellipse 48% 48% at 50% 50%,
-    black 55%, rgba(0,0,0,0.5) 72%, transparent 100%);
+  /* 白ふち → ピンクリング → ゴールドリング → 影 でシール感を演出 */
+  border: 4px solid #fff;
+  box-shadow:
+    0 0 0 4px #ff69b4,
+    0 0 0 7px #ffd700,
+    0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 /* 虫眼鏡ボタン */
