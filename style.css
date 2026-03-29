@@ -151,6 +151,11 @@ h1 {
     0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
+/* 写真なし時は非表示 */
+#face-photo.no-photo {
+  display: none;
+}
+
 /* 虫眼鏡ボタン */
 .magnify-btn {
   position: absolute;

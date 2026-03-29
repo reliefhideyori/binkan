@@ -39,7 +39,6 @@ fileInput.addEventListener('change', (e) => {
     preview.src = dataUrl;
     preview.style.display = 'block';
     sessionStorage.setItem('facePhoto', dataUrl);
-    startBtn.disabled = false;
   };
   reader.readAsDataURL(file);
 });
@@ -49,9 +48,18 @@ startBtn.addEventListener('click', startGame);
 // ===== Screen 2: ゲーム =====
 function startGame() {
   sensitiveIndex = Math.floor(Math.random() * BUTTON_COUNT);
-  facePhoto.src = sessionStorage.getItem('facePhoto');
   magnifyBtns.forEach(btn => btn.classList.remove('pressed'));
   sensitiveOverlay.classList.add('hidden');
+
+  const photoData = sessionStorage.getItem('facePhoto');
+  if (photoData) {
+    facePhoto.src = photoData;
+    facePhoto.classList.remove('no-photo');
+  } else {
+    facePhoto.src = '';
+    facePhoto.classList.add('no-photo');
+  }
+
   screenPhoto.hidden = true;
   screenGame.hidden  = false;
   hideBanner();
@@ -134,6 +142,5 @@ backBtn.addEventListener('click', () => {
   fileInput.value    = '';
   preview.src        = '';
   preview.style.display = 'none';
-  startBtn.disabled  = true;
   sessionStorage.removeItem('facePhoto');
 });
